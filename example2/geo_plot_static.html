@@ -38,7 +38,7 @@
                 - Mid point of all the locations
                 - Zoom appropriately so that all the locations are visible with in the screen limit
             */
-            var zoom = 13;
+            var zoom = 16;
             var lat = 48.823315; 
             var lon = 2.386549;
             const mymap = L.map('issMap').setView([lat, lon], zoom);
@@ -49,12 +49,12 @@
 
             mymap.addLayer(layer);
 
-
             const issIcon = L.icon({
                 iconUrl: 'truck.png',
                 iconSize: [50, 32],
                 iconAnchor: [25, 16]
             });
+
             let group = L.layerGroup();
             for (var i =0; i< locations.length;i++){
                 group.addLayer(L.marker(locations[i], { icon: issIcon }))

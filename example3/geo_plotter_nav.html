@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""
+    ></script>
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+    <style>
+      #issMap {
+        height: 600px;
+      }
+    </style>
+
+    <title>Live Geo Plotter</title>
+  </head>
+  <body>
+    <h1></h1>
+
+
+    <div id="issMap"></div>
+
+    <script>
+        var lat = 51.0;
+        var lon = 8.0;
+        /* increase zoom value to expand the map*/
+        var zoom = 4;
+        const issIcon = L.icon({
+        iconUrl: 'airplane_lr.png',
+        iconSize: [100, 60],
+        iconAnchor: [10, 40] /*object position offset (x, y)*/
+      });
+      // Making a map and tiles
+      // Setting a higher initial zoom to make effect more obvious
+      const mymap = L.map('issMap').setView([0,0], zoom);
+      let marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
+      const attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+      var layer = new L.StamenTileLayer("terrain");
+      
+      mymap.addLayer(layer);
+
+      
+
+     
+     
+async function geo_plotter_nav() {
+    lon = (lon+1)%360;
+    var pointsList =   [];
+    var len= 0;
+    var pointjsonData = {};
+    var propjsonData = {};
+    var arr = [];
+    arr.push(lon);
+    arr.push(lat);
+    var jsonData = {};
+    propjsonData["imei"] = 123;
+    pointjsonData["coordinates"] = arr;
+    pointjsonData["type"] = "Point";
+    jsonData["geometry"]= pointjsonData;
+    jsonData["properties"] = propjsonData;
+    jsonData["type"] = "Feature";
+    pointsList.push(jsonData);
+    len = len+1;
+    console.log(pointsList);
+    function onEachFeature(feature, layer) {
+        var popupContent = "<p>I started out as a GeoJSON " +
+            feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+        if (feature.properties && feature.properties.popupContent) {
+            popupContent += feature.properties.popupContent;
+        }
+
+        layer.bindPopup(popupContent);
+    }
+
+
+
+    L.geoJson(pointsList,{    
+        onEachFeature: onEachFeature,  
+        pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: "#ff7800",
+                color: "#000",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(mymap);
+
+        mymap.setView([lat, lon], mymap.getZoom());
+        marker.setLatLng([lat, lon]);
+
+
+}
+      geo_plotter_nav();
+      setInterval(geo_plotter_nav, 1000);
+      
+    </script>
+  </body>
+</html>

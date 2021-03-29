@@ -44,11 +44,12 @@
         var layer = new L.StamenTileLayer("terrain");
 
         mymap.addLayer(layer);
-        const issIcon = L.icon({
-        iconUrl: 'airplane_lr.png',
-        iconSize: [100, 60],
-        iconAnchor: [10, 40] /*object position offset (x, y)*/
-      });
+
+const issIcon = L.icon({
+    iconUrl: 'truck.png',
+    iconSize: [50, 32],
+    iconAnchor: [25, 16]
+});
 
 let marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
 
