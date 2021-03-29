@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""
+    ></script>
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+    <style>
+      #issMap {
+        height: 800px;
+      }
+    </style>
+
+    <title>Static Geo Plot</title>
+  </head>
+  <body>
+    <h1></h1>
+
+
+    <div id="issMap"></div>
+
+    <script>
+        
+        function geo_plot_static(locations){
+            /*
+                - we need to calculate the initial lat, lon and zoom dynamicaly based on the location
+                - Mid point of all the locations
+                - Zoom appropriately so that all the locations are visible with in the screen limit
+            */
+            var zoom = 13;
+            var lat = 48.823315; 
+            var lon = 2.386549;
+            const mymap = L.map('issMap').setView([lat, lon], zoom);
+            const attribution ='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+            // replace "toner" here with "terrain" or "watercolor"
+            var layer = new L.StamenTileLayer("terrain");
+
+            mymap.addLayer(layer);
+
+
+            const issIcon = L.icon({
+                iconUrl: 'truck.png',
+                iconSize: [50, 32],
+                iconAnchor: [25, 16]
+            });
+            let group = L.layerGroup();
+            for (var i =0; i< locations.length;i++){
+                group.addLayer(L.marker(locations[i], { icon: issIcon }))
+            }
+
+            group.addTo(mymap);
+
+        }
+
+var locations = [
+    [  48.823315, 2.386549]
+    , [  48.820884, 2.380056 ]
+    , [ 48.825957, 2.387973]
+    , [  48.826044, 2.386198 ]
+    , [  52.826044, 8.386198 ]
+];
+
+
+        geo_plot_static(locations);
+    </script>
+  </body>
+</html>
