@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""
+    ></script>
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+    <style>
+      #issMap {
+        height: 500px;
+      }
+    </style>
+
+    <title>Geo Plotter</title>
+  </head>
+  <body>
+    <h1>Geo Plotter</h1>
+
+    <p>
+      latitude: <span id="lat"></span>°<br />
+      longitude: <span id="lon"></span>° <br />
+    </p>
+
+    <div id="issMap"></div>
+
+    <script>
+        var lat = 0.0, lon = 0.0;
+        var zoom = 3;
+        const mymap = L.map('issMap').setView([0, 0], zoom);
+        const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+        // replace "toner" here with "terrain" or "watercolor"
+        var layer = new L.StamenTileLayer("terrain");
+
+        mymap.addLayer(layer);
+
+const issIcon = L.icon({
+    iconUrl: 'truck.png',
+    iconSize: [50, 32],
+    iconAnchor: [25, 16]
+});
+
+let marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
+
+let firstTime = true;
+
+function geo_plot(latitude, longitude){
+    mymap.setView([latitude, longitude], mymap.getZoom());
+    marker.setLatLng([latitude, longitude]);
+
+    document.getElementById('lat').textContent = latitude.toFixed(2);
+    document.getElementById('lon').textContent = longitude.toFixed(2);
+
+}
+
+async function geo_plot_wrapper() {
+    //lat = lat + 1.0;
+    lon = lon + 1.0;
+    geo_plot(lat, lon);
+}
+
+setInterval(geo_plot_wrapper, 1000);
+    </script>
+  </body>
+</html>
